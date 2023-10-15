@@ -1,22 +1,19 @@
 pipeline {
     agent any
-
     tools {
-        // Install the Maven version configured as "M3" and add it to the path.
         maven "MAVEN_HOME"
-    }
-    
+        }
     stages {
          stage('Checkout') {
             steps {
                 git 'https://github.com/anantha1917/Testing_Project.git'
+               }
             }
-        }
-        stage('compile') {
+         stage('compile') {
             steps {
                 bat 'cd c:\\Users\\murali\\git\\repository\\Testing_sel && mvn compile'
+                }
             }
-        }
         
         stage('test') {
             steps {
