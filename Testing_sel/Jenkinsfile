@@ -14,13 +14,12 @@ pipeline {
                 bat 'cd c:\\Users\\murali\\git\\repository\\Testing_sel && mvn compile'
                 }
             }
-        
         stage('test') {
             steps {
                 bat 'cd c:\\Users\\murali\\git\\repository\\Testing_sel && mvn clean test'
             }
         }
-         stage('Build') {
+      stage('Build') {
             steps {
                
                 bat 'cd c:\\Users\\murali\\git\\repository\\Testing_sel && mvn package'
