@@ -1,0 +1,53 @@
+pipeline {
+    agent any
+
+    tools {
+        // Install the Maven version configured as "M3" and add it to the path.
+        maven "MAVEN_HOME"
+    }
+    
+    stages {
+         stage('Checkout') {
+            steps {
+                git 'https://github.com/anantha1917/Testing_Project.git'
+            }
+        }
+        stage('compile') {
+            steps {
+                bat 'cd c:\\Users\\murali\\git\\repository\\Testing_sel && mvn compile'
+            }
+        }
+        
+        stage('test') {
+            steps {
+                bat 'cd c:\\Users\\murali\\git\\repository\\Testing_sel && mvn clean test'
+            }
+        }
+         stage('Build') {
+            steps {
+               
+                bat 'cd c:\\Users\\murali\\git\\repository\\Testing_sel && mvn package'
+            }
+        }
+    }
+      post {
+            always {
+                publishHTML(target :[
+                allowMissing: false,
+                alwaysLinkToLastBuild: false, 
+                keepAll: false, 
+                reportDir: 'C:\\Users\\murali\\git\\repository\\Testing_sel\\target\\surefire-reports', 
+                reportFiles: 'emailable-report.html', 
+                reportName: 'HTML Report',
+                reportTitles: 'Test cases execution report',
+                useWrapperFileDirectly: true])
+             
+             emailext (
+                subject: "${currentBuild.currentResult == 'SUCCESS' ? 'Build Success' : 'Build Failure'}: ${currentBuild.fullDisplayName}",
+                body: "${currentBuild.currentResult == 'SUCCESS' ? 'The build succeeded.' : 'The build has failed. Please check the console output for more details.'}",
+                to: "ananthaa699@gmail.com",
+                attachmentsPattern: 'C:\\Users\\murali\\git\\repository\\Testing_sel\\target\\surefire-reports\\emailable-report.html'
+             )
+            }
+       }
+}
